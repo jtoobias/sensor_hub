@@ -1,0 +1,17 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Backend API for sensor data collection and storage"
+authors = [
+    { name = "Jonathan", email = "rustusjit@gmail.com" }
+]
+requires-python = ">=3.13,<3.14"
+
+dependencies = [
+    "fastapi>=0.109",
+    "uvicorn>=0.25",
+    "pydantic>=2.5",
+    "sqlalchemy>=2.0.33",
+    "asyncpg>=0.31,<1.0",
+    "python-dotenv>=1.0",
+]

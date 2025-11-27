@@ -1,0 +1,16 @@
+[project]
+name = "frontend"
+version = "0.1.0"
+description = "Frontend web application to visualize sensor data"
+authors = [
+    { name = "Jonathan", email = "rustusjit@gmail.com" }
+]
+requires-python = ">=3.13,<3.14"
+
+dependencies = [
+    "plotly>=6.1,<7.0",
+    "dash>=3.1,<4.0",
+    "requests>=2.32,<3.0",
+    "python-dotenv>=1.0,<2.0",
+]
+
