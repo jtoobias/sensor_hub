@@ -1,0 +1,42 @@
+sensor_hub/                    # Root of the repo (NOT a Python package)
+├── .git/
+├── .gitignore
+├── README.md
+├── pyproject.toml              # Root: Python version + dev tools (black, ruff, pytest)
+├── noxfile.py                  # Repo-wide dev tasks, testing, linting
+├── infra/
+│   ├── docker-compose.yml      # Orchestrates containers
+│   ├── cloudflare/
+│   │   └── config.yml          # Cloudflare Tunnel config
+│   └── env/.env                # Repo-wide env variables (DB host, tokens)
+│
+├── sensor_acquisition/         # Sensor package
+│   ├── pyproject.toml          # Package metadata & dependencies
+│   ├── .env                    # Sensor-specific configuration
+│   └── src/
+│       └── sensor_acquisition/
+│           ├── __init__.py
+│           ├── __main__.py     # Optional entrypoint for container
+│           ├── sensor_reader.py
+│           └── uploader.py
+│
+├── backend/                    # FastAPI backend package
+│   ├── pyproject.toml          # Backend package dependencies
+│   ├── .env                    # Backend secrets / DB credentials
+│   └── src/
+│       └── backend/
+│           ├── __init__.py
+│           ├── main.py         # FastAPI entrypoint
+│           ├── routes.py
+│           ├── db.py
+│           ├── models.py
+│           └── schemas.py
+│
+├── frontend/                    # Frontend (HTML/JS)
+│   ├── index.html
+│   └── charts.js
+│
+└── docs/
+    ├── architecture.md
+    ├── api_reference.md
+    └── data_model.md

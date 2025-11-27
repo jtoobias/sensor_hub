@@ -1,0 +1,128 @@
+🗂 Project TODO List — Sensor Hub
+Phase 0 — Setup (Day 1-2)
+Initialize monorepo
+ Create root folder sensor_hub/
+ Initialize Git, add .gitignore
+ Create root pyproject.toml (Python version + dev tools)
+ Setup noxfile.py with basic lint/test tasks
+Create folder structure
+ sensor_acquisition/
+ backend/
+ frontend/
+ infra/ (docker-compose + .env)
+ docs/
+
+Create .env files
+ infra/env/.env (shared vars like DB host)
+ sensor_acquisition/.env (sensor settings)
+ backend/.env (DB creds, secrets)
+
+Phase 1 — Sensor Acquisition (Day 3-6)
+Set up Python package
+ Add src/sensor_acquisition/__init__.py
+ Add __main__.py as entrypoint
+ Add sensor_reader.py (read sensor data)
+ Add uploader.py (send data to backend API)
+
+Dependencies
+ Define package dependencies in sensor_acquisition/pyproject.toml
+
+pydantic, paho-mqtt, requests, sensor libraries (RPi.GPIO, etc.)
+
+Test local sensor scripts
+
+ Print sensor data locally
+
+ Structure data using Pydantic models
+
+Containerize sensor code
+
+ Create Dockerfile for sensor_acquisition
+
+ CMD = python -m sensor_acquisition
+
+ Test container on RPi (if available)
+
+Phase 2 — Backend (FastAPI + Postgres) (Day 7-12)
+
+Set up Python package
+
+ src/backend/__init__.py
+
+ main.py as FastAPI entrypoint
+
+ routes.py for API endpoints
+
+ models.py & schemas.py for Postgres and Pydantic
+
+Dependencies
+
+ pyproject.toml → FastAPI, Uvicorn, SQLAlchemy, Psycopg, python-dotenv
+
+ Optional: MQTT client if backend listens/publishes to sensors
+
+Connect to Postgres
+
+ Create DB tables for sensor data
+
+ Implement POST endpoint to receive data
+
+ Implement GET endpoint for dashboard queries
+
+Containerize backend
+
+ Create Dockerfile for backend
+
+ CMD = uvicorn backend.main:app --host 0.0.0.0 --port 8000
+
+ Test locally using docker-compose with Postgres
+
+Phase 3 — Frontend Dashboard (Day 13-16)
+
+Static dashboard
+
+ Create frontend/index.html
+
+ Add charts.js / chart library (Chart.js, Plotly, etc.)
+
+Connect to backend
+
+ Fetch sensor data from backend GET endpoints
+
+ Display live or historical data
+
+Containerize frontend (optional)
+
+ Serve static files via Nginx or backend FastAPI static route
+
+Phase 4 — Orchestration & Testing (Day 17-20)
+
+Docker Compose
+
+ Setup containers for sensor, backend, frontend, Postgres
+
+ Configure networking / environment variables
+
+End-to-end testing
+
+ Verify sensor data reaches backend
+
+ Verify frontend displays correct data
+
+ Test remote access outside local network
+
+Dev tooling
+
+ Setup Nox tasks for linting, tests, formatting
+
+ Ensure uv installs can sync all packages into dev venv
+
+Phase 5 — Documentation & Cleanup (Day 21+)
+
+ Update README.md with project overview, setup, run instructions
+
+ Add architecture diagrams in docs/
+
+ Document API endpoints in docs/api_reference.md
+
+ Optional: Add unit tests for sensor & backend
