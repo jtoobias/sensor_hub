@@ -1,12 +1,17 @@
 from paho.mqtt import client
-from utils import load_config
 from queue import SimpleQueue
 import time
 import csv
 from datetime import datetime
+# import yaml
 
 # File to store data
 CSV_FILE = "mqtt_data.csv"
+
+# Load YAML configuration file
+# def load_config(file_path="config.yaml"):
+#     with open(file_path, "r") as file:
+#         return yaml.safe_load(file)
 
 # Create the CSV file and write headers if not exist
 with open(CSV_FILE, mode="w", newline="") as file:
@@ -37,6 +42,8 @@ class MqttClient:
             port=1883,
             keepalive=60,
         )
+
+        self.client.connect(,)
         
         
         # Loop forever in another thread to listen for messages
@@ -63,19 +70,21 @@ class MqttClient:
 
 
 if __name__ == "__main__":
-    config = load_config("../src/config.yaml")
-    mqtt_client: MqttClient = MqttClient(config)
-    while True:
-        # Process and store messages
-        if not mqtt_client.msg_queue.empty():
-            message = mqtt_client.msg_queue.get()
-            print(f"CO2,TVOC: {message.payload.decode()}")
-            # Save message to CSV
-            with open(CSV_FILE, mode="a", newline="") as file:
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Format timestamp
-                writer = csv.writer(file)
-                data = message.payload.decode().split(",")
-                print (data)
-                writer.writerow([timestamp, data[0], data[1]])
-            # Note: Do further processing here, like saving to database
-        time.sleep(1)
+    print("Hello from sensor_acquisition!")
+# if __name__ == "__main__":
+    # config = load_config("../src/config.yaml")
+    # mqtt_client: MqttClient = MqttClient(config)
+    # while True:
+    #     # Process and store messages
+    #     if not mqtt_client.msg_queue.empty():
+    #         message = mqtt_client.msg_queue.get()
+    #         print(f"CO2,TVOC: {message.payload.decode()}")
+    #         # Save message to CSV
+    #         with open(CSV_FILE, mode="a", newline="") as file:
+    #             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Format timestamp
+    #             writer = csv.writer(file)
+    #             data = message.payload.decode().split(",")
+    #             print (data)
+    #             writer.writerow([timestamp, data[0], data[1]])
+    #         # Note: Do further processing here, like saving to database
+    #     time.sleep(1)

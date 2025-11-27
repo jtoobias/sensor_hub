@@ -458,6 +458,12 @@ requires-dist = [
 name = "sensor-hub"
 version = "0.1.0"
 source = { virtual = "." }
+dependencies = [
+    { name = "sensor-acquisition" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "sensor-acquisition", editable = "packages/sensors_acquisition" }]
 
 [[package]]
 name = "setuptools"
