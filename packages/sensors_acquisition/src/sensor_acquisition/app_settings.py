@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     # db_name: str = Field("sensor_data", env="")
     
     # MQTT configuration
-    mqtt_broker_ip: str = ""
+    mqtt_broker_ip: str = "192.168.178.181"
     mqtt_broker_username: str = ""
     mqtt_broker_password: str = ""
     mqtt_port: int = 1883
