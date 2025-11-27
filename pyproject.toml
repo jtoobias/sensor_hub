@@ -1,0 +1,27 @@
+[project]
+name = "sensor-hub"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
+[tool.ruff]
+# Files/folders to check
+src = "src"
+tests = "tests"
+
+# Maximum line length
+line-length = 88
+
+# Rules to enable
+select = ["E", "F", "W", "TYP"]  # E/F/W = style errors/warnings, TYP = type checking
+
+# Rules to ignore (optional)
+ignore = ["E203", "W503"]  # common conflicts with black-style formatting
+
+# Auto-fix settings
+fix = true
+
+# Optional: exclude virtual environments or build dirs
+exclude = ["venv", ".nox"]

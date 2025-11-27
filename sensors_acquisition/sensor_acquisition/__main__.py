@@ -32,12 +32,6 @@ class MqttClient:
         self.tvoc: int = 0
 
         # Connect to the MQTT broker
-        # self.client.connect(
-        #     host=config["mqtt"]["broker"],
-        #     port=config["mqtt"]["port"],
-        #     keepalive=config["mqtt"]["keepalive"],
-        # )
-        # Connect to the MQTT broker
         self.client.connect(
             host="192.168.2.10",
             port=1883,
