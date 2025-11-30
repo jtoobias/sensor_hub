@@ -51,8 +51,9 @@ venv.bak/
 .ipynb_checkpoints/
 
 # dotenv files
-.env
+*.env
 .env.*.local
+packages/sensors_acquisition/.env
 
 # mypy
 .mypy_cache/
@@ -69,3 +70,5 @@ dmypy.json
 
 #other
 *.csv
+packages/sensors_acquisition/.env
+packages/sensors_acquisition/.env
