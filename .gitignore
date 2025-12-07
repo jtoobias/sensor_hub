@@ -71,4 +71,3 @@ dmypy.json
 #other
 *.csv
 packages/sensors_acquisition/.env
-packages/sensors_acquisition/.env

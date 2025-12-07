@@ -19,12 +19,12 @@ settings: Settings = get_settings()
 # Create the CSV file and write headers if not exist
 with open(CSV_FILE, mode="w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["Timestamp", "CO2", "TVOC"])  # Header
+    writer.writerow(["Timestamp", "CO2", "TVOC","sdc40_co2","temp","Rhumid"])  # Header
 
 class MqttClient:
 
     def __init__(self, config: dict):
-        # Create a new MQTT client instance
+        # Create a "sensor_data/sensors"new MQTT client instance
         self.client = client.Client()
         print(config)
         # Set the callback for receiving messages
@@ -59,11 +59,11 @@ class MqttClient:
             print("Connected to MQTT broker!")
 
             # Subscribe to the topic
-            self.client.subscribe("sensor_data/ccs811")
+            # self.client.subscribe("sensor_data/sensor")
             # Subscribe to all topics in config
-            # for topic in self.config["mqtt"]["broker"]:
-            #     print(f"Subscribing to topic: {topic}")
-            #     client.subscribe(topic)
+            for topic in settings.mqtt_broker_topics:
+                print(f"Subscribing to topic: {topic}")
+                client.subscribe(topic)
         else:
             print(f"Failed to connect, return code {rc}")
 
@@ -76,13 +76,12 @@ if __name__ == "__main__":
         # Process and store messages
         if not mqtt_client.msg_queue.empty():
             message = mqtt_client.msg_queue.get()
-            print(f"CO2,TVOC: {message.payload.decode()}")
+            print(f"CO2,TVOC,co2_scd40(ppm),temp,rh: {message.payload.decode()}")
             # Save message to CSV
             with open(CSV_FILE, mode="a", newline="") as file:
                 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Format timestamp
                 writer = csv.writer(file)
-                data = message.payload.decode().split(",")
-                print (data)
-                writer.writerow([timestamp, data[0], data[1]])
+                data: list[int] = message.payload.decode().split(",")
+                writer.writerow([timestamp, data[0], data[1],data[2], int(data[3])/10, int(data[4])/10])
             # Note: Do further processing here, like saving to database
         time.sleep(1)
