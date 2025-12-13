@@ -4,6 +4,7 @@ import time
 import csv
 from datetime import datetime
 from sensor_acquisition.app_settings import Settings, get_settings
+from data_models.models import SensorData
 # import yaml
 
 # File to store data
@@ -44,10 +45,8 @@ class MqttClient:
             keepalive=60,
         )
         
-        
         # Loop forever in another thread to listen for messages
         self.client.loop_start()
-
 
     # Callback for when a message is received
     def on_message(self, client, userdata, msg):
@@ -57,9 +56,6 @@ class MqttClient:
     def on_connect(self, client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT broker!")
-
-            # Subscribe to the topic
-            # self.client.subscribe("sensor_data/sensor")
             # Subscribe to all topics in config
             for topic in settings.mqtt_broker_topics:
                 print(f"Subscribing to topic: {topic}")
@@ -67,9 +63,6 @@ class MqttClient:
         else:
             print(f"Failed to connect, return code {rc}")
 
-
-# if __name__ == "__main__":
-#     print("Hello from sensor_acquisition!")
 if __name__ == "__main__":
     mqtt_client: MqttClient = MqttClient(config=settings.model_dump())
     while True:

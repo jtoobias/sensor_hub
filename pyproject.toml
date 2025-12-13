@@ -11,12 +11,14 @@ dependencies = ["sensor-acquisition"]
 sensor-acquisition = { workspace = true }
 backend = { workspace = true }
 frontend = { workspace = true }
+data_models = { workspace = true }
 
 [tool.uv.workspace]
 members = [
     "packages/sensors_acquisition",
     "packages/frontend",
     "packages/backend",
+    "packages/data_models",
 ]
 
 [tool.ruff]

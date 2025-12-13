@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, Float, DateTime,ForeignKey,JSON,String
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.db import Base
-from app.schemas import SensorData
 from datetime import datetime, timezone
 # Device_types -> Device -> SensorReadings
 
