@@ -29,7 +29,7 @@ class Device(Base):
     __tablename__ = "devices"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    serial_number: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    serial_number: Mapped[int] = mapped_column(Integer, unique=True, nullable=False)
     device_type_id: Mapped[int] = mapped_column(Integer, nullable=False)
     firmware_version: Mapped[str] = mapped_column(String, nullable=True)
     first_seen: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(timezone.utc))
