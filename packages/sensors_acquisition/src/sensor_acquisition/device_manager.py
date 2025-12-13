@@ -32,12 +32,12 @@ class DeviceManager(BaseModel):
             case "sensor_device/data":
                 data_parts = msg.payload.decode().split(",")
                 if len(data_parts) >= 2:
-                    serial_number: int = int(data_parts[0])
+                    payload: list[int] = [int(value) for value in data_parts]
+                    serial_number: int = payload[0]
                     device = self.devices.get(serial_number)
                     if not device:
                         print(f"Unregistered device {serial_number} sent data.")
                         return
-                    payload = [int(value) for value in data_parts[1:]]
                     sensor_data:SensorData = self.build_sensor_data(payload=payload,
                                                                 sensor_ids=device.sensor_ids
                                                                 )
@@ -59,7 +59,8 @@ class DeviceManager(BaseModel):
         data: dict[str, Any] = {}
         if sensor_ids is None:
             return SensorData(
-                rssi=int(payload[0]),
+                serial_number=payload[0],
+                rssi=int(payload[1]),
                 timestamp=datetime.now(timezone.utc),
             )
         for sensor_id, raw_value in zip(sensor_ids, payload):
@@ -75,6 +76,9 @@ class DeviceManager(BaseModel):
                 data[field_name] = raw_value
 
         return SensorData(
+            serial_number=payload[0],
+            rssi=int(payload[1]),
+            battery_voltage=float(payload[2])/1000.0,
             **data,
             timestamp=datetime.now(timezone.utc),
         )

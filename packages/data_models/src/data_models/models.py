@@ -30,6 +30,7 @@ class SensorDevice(BaseModel):
     
 
 class SensorData(BaseModel):
+    serial_number: int
     timestamp: None | datetime = None
     temperature: None | float = None
     humidity: None | float = None
