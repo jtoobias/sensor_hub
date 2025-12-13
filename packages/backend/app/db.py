@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from .settings import settings
+from app.settings import settings
 
 #All DB plumbing lives here.
 

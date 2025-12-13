@@ -2,8 +2,8 @@
 from sqlalchemy import Column, Integer, Float, DateTime,ForeignKey,JSON,String
 from datetime import datetime,timezone
 from sqlalchemy.orm import Session
-from .models import DeviceType, Device, SensorReading
-from .db import SessionLocal
+from app.models import DeviceType, Device, SensorReading
+from app.db import SessionLocal
 
 # -------------------------
 # Session helper
@@ -109,7 +109,7 @@ def update_last_seen(serial_number: str):
         device = session.query(Device).filter_by(serial_number=serial_number).first()
         if not device:
             raise ValueError(f"Device '{serial_number}' not found")
-        device.last_seen = datetime.utcnow()
+        device.last_seen = datetime.now(timezone.utc)
         session.commit()
         return device
     finally:
@@ -121,7 +121,13 @@ def update_last_seen(serial_number: str):
 def insert_sensor_reading(serial_number: str, data: dict):
     """
     Insert a new sensor reading and update the device's last_seen.
-    Data dict keys: temperature, humidity, pressure, co2_ppm, battery_voltage, rssi
+    Only inserts fields that exist in the SensorReading table.
+    
+    Example:
+    payload = '{"temperature": 23.5, "humidity": 45.2, "pm2_5": 12.3}'
+    data = SensorData.parse_raw(payload)
+
+    insert_sensor_reading("ESP32_001", data.dict(exclude_unset=True))
     """
     session = get_session()
     try:
@@ -130,24 +136,25 @@ def insert_sensor_reading(serial_number: str, data: dict):
             raise ValueError(f"Device '{serial_number}' not registered")
 
         # Update last_seen
-        device.last_seen = datetime.utcnow()
+        device.last_seen = datetime.now(timezone.utc)
 
-        # Create new reading
-        reading = SensorReading(
-            device=device,
-            timestamp=datetime.utcnow(),
-            temperature=data.get("temperature"),
-            humidity=data.get("humidity"),
-            pressure=data.get("pressure"),
-            co2_ppm=data.get("co2_ppm"),
-            battery_voltage=data.get("battery_voltage"),
-            rssi=data.get("rssi")
-        )
+        # Keep only keys that exist in the SensorReading table
+        valid_keys = {c.name for c in SensorReading.__table__.columns}
+        # Filter out data that has not column
+        filtered_data = {k: v for k, v in data.items() if k in valid_keys}
+
+        # Add device_id and timestamp
+        filtered_data["device_id"] = device.id
+        filtered_data["timestamp"] = datetime.now(timezone.utc)
+
+        reading = SensorReading(**filtered_data)
         session.add(reading)
         session.commit()
         return reading
     finally:
         session.close()
+
+
 
 def get_readings_for_device(serial_number: str, limit: int = 100):
     """Fetch the last N readings for a device."""
