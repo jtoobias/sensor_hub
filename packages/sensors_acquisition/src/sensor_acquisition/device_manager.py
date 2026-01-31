@@ -5,6 +5,7 @@ from paho.mqtt.client import MQTTMessage
 from sensor_acquisition.mqtt import MqttClient
 from datetime import datetime, timezone
 from typing import Any
+from loguru import logger
 
 class DeviceManager(BaseModel):
     devices: dict[int,SensorDevice] = Field(default_factory=dict)
@@ -23,7 +24,7 @@ class DeviceManager(BaseModel):
                     serial_number: int = int(data_parts[0])
                     if serial_number not in self.devices:
                         self.uuids.add(serial_number)
-                        print(f"Registering new device with serial number: {serial_number}")
+                        logger.info(f"Registering new device with serial number: {serial_number}")
                         #Sensor device registering
                         self.devices[serial_number] = (SensorDevice(
                             serial_number=serial_number,
@@ -31,12 +32,15 @@ class DeviceManager(BaseModel):
                             device_type=int(data_parts[4]),
                             sensor_ids=[int(id) for id in data_parts[5:]],
                         ))           
-                        print(f"Device {serial_number} now registered.")
-                        self.mqtt_client.publish_msg("sensor_device/registration_response",f"ACK_{serial_number}")
+                        logger.info(f"Device {serial_number} now registered.")
+                        self.mqtt_client.publish_msg("sensor_device/registration_response",f"<A,{serial_number}>")
+                    else:
+                        logger.info(f"Device {serial_number} already registered. Resending ACK.")
+                        self.mqtt_client.publish_msg("sensor_device/registration_response",f"<A,{serial_number}>")
                     #ToDo: Update data base by sending mqtt to backend for registeration
                     
                 else:                           
-                    print(f"Unexpected data format: {msg.payload.decode()}")
+                    logger.warning(f"Unexpected data format: {msg.payload.decode()}")
                     
             case "sensor_device/data":
                     #ToDo: Check if it is rquired to ack data reception
@@ -46,16 +50,18 @@ class DeviceManager(BaseModel):
                     serial_number: int = payload[0]
                     device = self.devices.get(serial_number)
                     if not device:
-                        print(f"Unregistered device {serial_number} sent data.")
+                        logger.info(f"Unregistered device {serial_number} sent data.")
                         return
                     sensor_data:SensorData = self.build_sensor_data(payload=payload,
                                                                 sensor_ids=device.sensor_ids
                                                                 )
                     
                     #ToDo: Update data base by sending mqtt to backend for data
-                    print(f"Parsed Sensor Data: {sensor_data}")
+                    logger.info(f"Parsed Sensor Data: {sensor_data}")
+                    
+                    self.mqtt_client.publish_msg("sensor_device/data_responses",f"<A,{serial_number}>")
                 else:         
-                    print(f"Unexpected data format: {msg.payload.decode()}")
+                    logger.info(f"Unexpected data format: {msg.payload.decode()}")
                     
     def build_sensor_data(
         self,
