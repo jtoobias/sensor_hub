@@ -24,7 +24,7 @@ class MqttClient:
     
     # Callback for when a message is received
     def on_message(self, client, userdata, msg:MQTTMessage):
-        # print(f"Received message on {msg.topic}: {msg.payload.decode()}")
+        print(f"Received message on {msg.topic}: {msg.payload.decode()}")
         self.msg_queue.put(msg)
 
     def on_connect(self, client, userdata, flags, rc):
@@ -36,3 +36,6 @@ class MqttClient:
                 client.subscribe(topic)
         else:
             print(f"Failed to connect, return code {rc}")
+            
+    def publish_msg(self,topic:str,payload:str):
+        self.client.publish(topic,payload)

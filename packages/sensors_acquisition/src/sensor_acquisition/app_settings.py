@@ -4,11 +4,11 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # MQTT configuration
-    mqtt_broker_ip: str = "192.168.178.181"
+    mqtt_broker_ip: str = "192.168.178.127"
     mqtt_broker_username: str = ""
     mqtt_broker_password: str = ""
     mqtt_port: int = 1883
-    mqtt_broker_sensor_topics: list[str] = Field(default_factory=lambda: ["sensor_data/ccs811"])
+    mqtt_broker_sensor_topics: list[str] = Field(default_factory=lambda: ["sensor_device/data", "sensor_device/registration"])
     # Sensor options
     # sample_interval: float = Field(5.0, env="SAMPLE_INTERVAL")  # seconds
 

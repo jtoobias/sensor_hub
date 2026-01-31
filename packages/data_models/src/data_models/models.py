@@ -7,7 +7,8 @@ SENSOR_ID_MAP = {
     1: "temperature",
     2: "humidity",
     3: "co2_ppm",
-    4: "pressure",
+    4: "tvoc_ppb",
+    5: "pressure",
     # add more as needed
 }
 
