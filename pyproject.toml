@@ -3,7 +3,7 @@ name = "sensor-hub"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<3.14"
 dependencies = ["sensor-acquisition"]
 
 
@@ -12,6 +12,11 @@ sensor-acquisition = { workspace = true }
 backend = { workspace = true }
 frontend = { workspace = true }
 data_models = { workspace = true }
+
+[dependency-groups]
+backend = ["backend"]
+sensor_acquisition = ["sensor-acquisition"]
+frontend = ["frontend"]
 
 [tool.uv.workspace]
 members = [
