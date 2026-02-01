@@ -32,9 +32,8 @@ sensor_hub/                    # Root of the repo (NOT a Python package)
 │           ├── models.py
 │           └── schemas.py
 │
-├── frontend/                    # Frontend (HTML/JS)
-│   ├── index.html
-│   └── charts.js
+├── frontend/                    # Frontend (HTML/Dash)
+│   └── app.py
 │
 └── docs/
     ├── architecture.md
