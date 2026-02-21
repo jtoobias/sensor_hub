@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # MQTT configuration
-    mqtt_broker_ip: str = "192.168.178.127"
+    mqtt_broker_ip: str = "192.168.178.122"
     mqtt_broker_username: str = ""
     mqtt_broker_password: str = ""
     mqtt_port: int = 1883
